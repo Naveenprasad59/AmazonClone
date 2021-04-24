@@ -15,7 +15,7 @@ export default function CheckoutProduct({id,title,price,rating,image}) {
               <p key={i}>⭐</p>
             ))}
               </div>
-              <button onClick = {()=>{
+              <button className="removebutton" onClick = {()=>{
                    updatebasket( (prevState) => {
                        console.log("Found");
                       const newState = prevState.filter( (item) => {
@@ -23,6 +23,7 @@ export default function CheckoutProduct({id,title,price,rating,image}) {
                        })
                        return newState;
                    })
+                   alert("Confirm remove from cart");
               }}>Remove this item from cart</button>
             </div>
         </div>

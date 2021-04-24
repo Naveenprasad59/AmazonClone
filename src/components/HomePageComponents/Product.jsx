@@ -25,6 +25,7 @@ export default function Product({id, title, price, rating, image }) {
           updatedata((prevState) => {
             return [ ...prevState,{title:title,price:price,rating:rating,image:image,id:id}]
           })
+          alert("Added to cart");
         }} className="product_to_cart"> Add to Cart </button>
       {/* </div> */}
     </div>

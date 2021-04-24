@@ -70,3 +70,17 @@
     justify-content: center;
     font-size: 300%;
 }
+
+.checkoutright > button {
+    background: #f0c14b;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    padding: 2px 5px;
+}
+
+.removebutton {
+    background: #f0c14b;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    padding: 2px 5px;
+}
