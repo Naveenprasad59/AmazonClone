@@ -35,7 +35,7 @@ export default function Checkout() {
             </div>
           </div>
           <div className="checkoutright">
-            <p>Total cost ({0} items) : <strong>₹ {total}</strong></p>
+            <p>Total cost ({basket.length} items) : <strong>₹ {total}</strong></p>
            {/* <p>  <input type="checkbox" >This has a special gift</input> </p> */}
             <button>Proceed to checkout</button>
           </div>
