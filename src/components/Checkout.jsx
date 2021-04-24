@@ -6,7 +6,7 @@ import CheckoutProduct from "./HomePageComponents/CheckoutProduct"
 
 function findTotal(arr) {
   var total = 0;
-  arr.map( (item) => {
+  arr.forEach( (item) => {
     total = total + item.price;
   })
   return total;
