@@ -1,7 +1,8 @@
 import React,{useContext} from 'react'
-import {StateContext} from "../../Providers/stateProvider";
-export default function CheckoutProduct({id,title,price,rating,image}) {
-    const [basket,updatebasket] = useContext(StateContext);
+import {StateContext,ProductContext} from "../../Providers/stateProvider";
+export default function CheckoutProduct({id,title,price,rating,image,quantity}) {
+    const updatebasket = useContext(StateContext)[1];
+    const updateproduct = useContext(ProductContext)[1];
     return (
         <div className="checkoutproduct">
            <img className="checkoutimage" src={image} alt="checkoutproduct" />
@@ -15,7 +16,17 @@ export default function CheckoutProduct({id,title,price,rating,image}) {
               <p key={i}>⭐</p>
             ))}
               </div>
+              <p><strong>Quantity: {quantity}</strong></p>
               <button className="removebutton" onClick = {()=>{
+                updateproduct( (prevState) => {
+                    const newState = [...prevState];
+                    newState.forEach( (item)=>{
+                      if(item._id === id){
+                        item.quantity = 0;
+                      }
+                    })
+                    return newState;
+                })
                    updatebasket( (prevState) => {
                        console.log("Found");
                       const newState = prevState.filter( (item) => {

@@ -7,7 +7,7 @@ import CheckoutProduct from "./HomePageComponents/CheckoutProduct"
 function findTotal(arr) {
   var total = 0;
   arr.forEach( (item) => {
-    total = total + item.price;
+    total = total + item.price * item.quantity;
   })
   return total;
 }
@@ -27,7 +27,7 @@ export default function Checkout() {
             <div>
             { basket.length > 0 ?
               basket.map((item,i) => {
-              return <CheckoutProduct key={i}  id={item.id} title={item.title} price={item.price} rating={item.rating} image={item.image} />
+              return <CheckoutProduct key={i}  id={item.id} title={item.title} price={item.price} rating={item.rating} image={item.image} quantity={item.quantity} />
             }
             ): <p className="noitem">No Item in Cart</p>
             }

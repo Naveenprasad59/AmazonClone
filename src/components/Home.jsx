@@ -1,8 +1,71 @@
-import React from "react";
+import React,{useEffect,useState,useContext} from "react";
 import Nav from "./HomePageComponents/Nav";
 import "../home.css";
 import Product from "./HomePageComponents/Product";
+import {StateContext,ProductContext} from "../Providers/stateProvider";
+import axios from "axios";
+
 function Home() {
+  const [firstTwo,updatefirstTwo] = useState([]);
+  const [middle,updatemiddle] = useState([]);
+  const [last,updatelast] = useState([]);
+  const [pro,updatepro] = useContext(ProductContext);
+  const [basket] = useContext(StateContext);
+
+  function getQuantity(id){
+    var quantity = 0;
+    basket.forEach(( item) => {
+      if(item.id === id){
+        quantity =  item.quantity;
+      }
+    })
+    return quantity;
+  }
+
+  // function getProducts(){
+  //   axios.get("http://localhost:8000/products").then((result)=>{
+  //     let products = result.data.products;
+  //     products = products.map ( (prod) => {
+  //        return {...prod,quantity: getQuantity(prod._id)}
+  //     })
+  //     updatepro( (prevState)=>{
+  //       return products;
+  //     })
+  //   })
+  // }
+  // getProducts();
+  useEffect(function (){
+    if(pro.length === 0){
+    axios.get("http://localhost:8000/products").then((result)=>{
+       let products = result.data.products;
+       products = products.map ( (prod) => {
+         return {...prod,quantity: getQuantity(prod._id)}
+       })
+       updatepro( (prevState) => {
+         return products;
+       })
+     })
+     console.log("Updated");
+   }else{
+     // let products = pro;
+     // products = pro.map( (prod)=>{
+     //   return {...prod,quantity: getQuantity(prod._id)}
+     // })
+     // updatepro(products);
+     console.log("daw");
+     console.log(pro);
+   }
+ },[]);
+
+  useEffect( function (){
+    updatefirstTwo(pro.slice(0,2));
+    updatemiddle(pro.slice(2,pro.length-1));
+    updatelast(pro.slice(pro.length-1,pro.length));
+      // console.log("PRODUCTS"+pro[0]);
+      // updatefirstTwo(pro.slice(0,2));
+      // updatemiddle(pro.slice(2,pro.length-1));
+      // updatelast(pro.slice(pro.length-1,pro.length));
+  },[pro]);
   return (
     <div>
       <Nav />
@@ -13,58 +76,24 @@ function Home() {
           alt="amazon-banner"
         />
         <div className="products">
-          <Product
-            key="1"
-            id ={1}
-            title="Book1"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
-          <Product
-            key="2"
-            id = {2}
-            title="Book2"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
+          {
+           firstTwo.map( (product) => {
+            return <Product key={product._id} id={product._id} title={product.title}  price={product.price} rating={product.rating} image={product.image} quantity={product.quantity} />
+          })
+          }
           </div>
           <div className="products">
-           <Product
-            key="3"
-            id = {3}
-            title="Book3"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
-           <Product
-            key="4"
-            id = {4}
-            title="Book4"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
-          <Product
-            key="5"
-            id = {5}
-            title="Book5"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
+          {
+            middle.map( (product) => {
+            return <Product key={product._id} id={product._id} title={product.title}  price={product.price} rating={product.rating} image={product.image} quantity={product.quantity} />
+          })
+          }
         </div>
         <div className="products">
-          <Product
-            key="6"
-            id = {6}
-            title="Book6"
-            price={15}
-            rating={4}
-            image="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-          />
+        {last.map((product) =>{
+          return <Product key={product._id} id={product._id} title={product.title}  price={product.price} rating={product.rating} image={product.image} quantity={product.quantity} />
+        } )
+        }
         </div>
       </div>
     </div>

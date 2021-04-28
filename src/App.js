@@ -4,9 +4,11 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Checkout from "./components/Checkout";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import {StateProvider} from "./Providers/stateProvider";
+import {StateProvider,ProductProvider} from "./Providers/stateProvider";
 export default function App() {
   return (
+    
+    <ProductProvider>
     <StateProvider>
     <div>
       <Router>
@@ -17,6 +19,7 @@ export default function App() {
         </Switch>
       </Router>
     </div>
-    </StateProvider>
+     </StateProvider>
+    </ProductProvider>
   );
 }
