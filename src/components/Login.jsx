@@ -1,8 +1,64 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React,{useState} from "react";
+import {Link,useHistory} from "react-router-dom";
 import "../login.css";
+import axios from "axios";
 
 export default function Login() {
+  const history = useHistory();
+  const [username,setUsername] = useState("");
+  const [password,setPassword] = useState("");
+  async function registerUser() {
+    axios.post("http://localhost:8000/register",
+    {username: username,password: password})
+    .then(function(response){
+      // console.log(response);
+      if(response.data.success){
+        history.push('/');
+      }else{
+       console.log("not registered");
+      }
+    }).catch(function(error){
+      history.push('/login');
+    })
+  //   return fetch("http://localhost:8000/register",
+  //   {
+  //     method: 'POST',
+  //     headers: {
+  //    'Content-Type': 'application/json'
+  //  },
+  //   body: JSON.stringify({username: username,password: password})
+  // }).then( (response) =>{
+  //     return response.json();
+  //   });
+  }
+  async function loginUser() {
+    axios.post("http://localhost:8000/login",
+    {username: username,password: password})
+    .then(function(response){
+      // console.log(response);
+      if(response.data.success){
+        history.push('/');
+      }
+      else{
+       console.log("not logged");
+      }
+    }).catch(function(error){
+      history.push('/login');
+    })
+  }
+
+  async function HandleRegister(e){
+    e.preventDefault();
+    console.log("clicked");
+    await registerUser();
+  }
+
+  async function HandleLogin(e){
+    e.preventDefault();
+    console.log("clicked");
+    await loginUser();
+  }
+
   return (
     <div className="login">
       <Link className="imagediv" to='/'>
@@ -12,14 +68,15 @@ export default function Login() {
       <h3>SignIn</h3>
         <form className="form">
           <p><strong>Username</strong></p>
-          <input type="text" ></input>
+          <input type="email" name="username" value={username} onChange={(e)=>{setUsername(e.target.value)}}></input>
           <p><strong>Password</strong></p>
-          <input type="password" ></input>
-          <button>Login</button>
+          <input type="password" name="password" value={password} onChange={(e)=>{setPassword(e.target.value)}}></input>
+          <input type="hidden" name="action" value="login"></input>
+          <button onClick={(e)=>{HandleLogin(e)}}>Login</button>
           <pre>Agree to the terms and condition</pre>
-          <button >Create Amazon Account</button>
+          <button onClick={(e)=>{HandleRegister(e)}}>Create Amazon Account</button>
         </form>
       </div>
-     </div> 
+     </div>
   );
 }
