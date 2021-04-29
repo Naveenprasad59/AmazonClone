@@ -1,5 +1,7 @@
-import React,{useState} from "react";
+import React,{useState,useContext} from "react";
 import {Link,useHistory} from "react-router-dom";
+import {UserContext} from "../Providers/stateProvider.js";
+
 import "../login.css";
 import axios from "axios";
 
@@ -7,12 +9,15 @@ export default function Login() {
   const history = useHistory();
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
+  const [user,setUser] = useContext(UserContext);
   async function registerUser() {
     axios.post("http://localhost:8000/register",
     {username: username,password: password})
     .then(function(response){
       // console.log(response);
       if(response.data.success){
+        setUser(username);
+        console.log(user);
         history.push('/');
       }else{
        console.log("not registered");
@@ -37,6 +42,8 @@ export default function Login() {
     .then(function(response){
       // console.log(response);
       if(response.data.success){
+        setUser(username);
+        console.log(user);
         history.push('/');
       }
       else{

@@ -2,9 +2,11 @@ import React,{useContext} from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import { Link } from "react-router-dom";
-import {StateContext} from "../../Providers/stateProvider"
+import {StateContext,UserContext} from "../../Providers/stateProvider"
 function Nav() {
   const [basket] = useContext(StateContext);
+  var [user] = useContext(UserContext);
+  var username = user===""?"Guest":user;
   return (
     <div className="header-container">
       <Link to="/">
@@ -22,7 +24,7 @@ function Nav() {
         <Link to="/login">
           <ExtraNav
             key="1"
-            firstline="Hello,Guest"
+            firstline={`Hello ${username}`}
             secondline="Account & Lists"
           />
         </Link>

@@ -1,8 +1,10 @@
 import React,{useContext} from "react";
 import Nav from "./HomePageComponents/Nav";
 import "../checkout.css";
-import {StateContext} from "../Providers/stateProvider";
+import {StateContext,UserContext,ProductContext} from "../Providers/stateProvider";
 import CheckoutProduct from "./HomePageComponents/CheckoutProduct"
+import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 function findTotal(arr) {
   var total = 0;
@@ -12,8 +14,31 @@ function findTotal(arr) {
   return total;
 }
 
+async function byProducts(basket,history,user,price,updatebasket,updateproduct) {
+
+  const response = axios.post("http://localhost:8000/buyproduct",
+  {products: basket,user: user,price: price,date: new Date().toISOString().slice(0, 10)})
+  .then(function(response) {
+    if(response.data.success){
+      updatebasket((prevState) => {
+        return [];
+      })
+      updateproduct((prevState)=>{
+        return [];
+      })
+      history.push("/");
+    }
+    else{
+      alert("Please try again later");
+    }
+  })
+}
+
 export default function Checkout() {
-  const [basket] = useContext(StateContext);
+  const history = useHistory();
+  const [basket,updatebasket] = useContext(StateContext);
+  const [product,updateproduct] = useContext(ProductContext);
+  const [user] = useContext(UserContext);
   const total = findTotal(basket);
   console.log(total);
   return (
@@ -37,7 +62,12 @@ export default function Checkout() {
           <div className="checkoutright">
             <p>Total cost ({basket.length} items) : <strong>₹ {total}</strong></p>
            {/* <p>  <input type="checkbox" >This has a special gift</input> </p> */}
-            <button>Proceed to checkout</button>
+            <button onClick={() => {
+                if(user === ""){
+                  history.push("/login");
+                }
+                else{byProducts(basket,history,user,total,updatebasket,updateproduct);}
+            }}>Proceed to checkout</button>
           </div>
       </div>
     </div>
